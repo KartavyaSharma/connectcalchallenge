@@ -9,9 +9,20 @@
 <body>
     <h1>Image Upload</h1>
     <!-- BEGIN TASK 1 -->
-    <form action="/submit_image">
+    <form method="POST" action="/submit_image" enctype="multipart/form-data">
         <input type="file" id="image_file" name="image_to_be_uploaded">
-        <input type="submit" id="submission">
+        <input type="submit" id="submit-button">
     </form>
+    <div id="image-list">
+        {% if 'image_uploads' in image_data.keys() %}
+            <ul>
+            {% for image in image_data['image_uploads'] %}
+                <li>
+                    <img src="../static/images/{{image}}" />
+                </li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
     <!-- END TASK 1 -->
 </body>
