@@ -2,7 +2,9 @@
 
 import os
 from flask import Flask, render_template, request, jsonify, session
-from werkzeug.utils import secure_filename
+from flask.helpers import url_for
+from flask.wrappers import Request
+from werkzeug.utils import redirect, secure_filename
 import json
 
 # Configure Flask App
@@ -16,6 +18,7 @@ app.config['SECRET_KEY'] = 'secret!'
 app.config['DEBUG'] = True
 app.config['UPLOAD_FOLDER'] = UPLOAD_LOCATION
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000
+app.config['image_data'] = {}
 
 @app.route('/')
 def index():
@@ -23,7 +26,7 @@ def index():
         :return: index.html
     """
     session["count"] = 0
-    return render_template("index.html", image_data={})
+    return render_template('index.html', image_data=app.config['image_data'])
 
 '''
 BEGIN TASK 1
@@ -72,7 +75,9 @@ def submit_image():
         data = {}
         with open('data.json', "r+") as json_file:
             data = json.load(json_file)
-        return render_template('index.html', image_data=data)
+        app.config['image_data'] = data
+        return redirect(url_for('index', upload_flag=True))
+        # return render_template('index.html', image_data=data)
 
 '''
 END TASK 1
